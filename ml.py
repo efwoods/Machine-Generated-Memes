@@ -37,4 +37,4 @@ def obtain_image(
     ).images[0]
     return image
 
-image = obtain_image(prompt, num_inference_steps=5, seed=1024)
+#image = obtain_image(prompt, num_inference_steps=5, seed=1024)
