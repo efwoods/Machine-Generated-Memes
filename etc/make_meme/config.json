@@ -1,6 +1,6 @@
 {
     "SECRET_KEY": "~a Flask secret key here~",
     "OPEN_AI_KEY": "~your key~",
-    "FONT_PATH": "~path to a font~",
+    "FONT_PATH": "~/Library/Fonts/Impact-Font/impact.tff",
     "DB_URI": "~your Postgres URI~"
 }
