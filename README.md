@@ -1,2 +1,3 @@
-# FastAPI4ML
-FastAPI for Machine Learning: Live coding an ML web application.
+# Machine-Generated-Memes
+
+FastAPI for Machine Learning: Based off a live coding of an ML web application.
