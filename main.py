@@ -37,6 +37,7 @@ def generate_image_memory(
         seed=seed,
         guidance_scale=guidance_scale
     )
+    memory_stream = io.BytesIO()
     image.save(memory_stream, format="PNG")
     memory_stream.seek(0)
     return StreamingResponse(memory_stream, media_type="image/png")
