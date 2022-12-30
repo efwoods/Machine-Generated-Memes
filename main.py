@@ -4,6 +4,10 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from ml import obtain_image
 import io
+import json
+from PIL import Image
+from image_manager import Image_Manager
+import datetime
 
 app = FastAPI()
 
@@ -60,3 +64,49 @@ def generate_image(
     image.save("image.png")
     
     return FileResponse("image.png")
+
+@app.get("/generate-meme")
+def generate_image(
+    prompt: str,
+    *,
+    seed: int,
+    num_inference_steps: int = 50,
+    guidance_scale: float = 7.5
+):
+    image = obtain_image(
+        prompt, 
+        num_inference_steps=num_inference_steps, 
+        seed=seed,
+        guidance_scale=guidance_scale
+    )
+    image.save("image.png")
+    response = json.loads(prompt)
+    with Image.open(f"image.png").convert(
+        "RGBA"
+    ) as base:
+        overlay_image = Image_Manager.add_text(
+            base=base,
+            text=prompt,
+            position=(500, 385),
+            font_size=30,
+            text_color="black",
+            rotate_degrees=20,
+            wrapped_width=22,
+        )
+        watermark = Image_Manager.add_text(
+                base=base,
+                text="machine-generated-memes",
+                position=(25, 600),
+                font_size=25,
+                text_color="white",
+            )
+    base = Image.alpha_composite(base, watermark)
+    out = Image.alpha_composite(base, overlay_image)
+    if out.mode in ("RGBA", "P"):
+        out = out.convert("RGB")
+        date = datetime.datetime.now()
+        image_name = f"{date}.jpg"
+        file_location = f"makememe/static/creations/{image_name}"
+        out.save(file_location)
+    return image_name
+    # return FileResponse("image.png")
