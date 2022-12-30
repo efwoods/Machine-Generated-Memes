@@ -16,7 +16,7 @@ pipe = StableDiffusionPipeline.from_pretrained(
 
 pipe.to("cpu")
 
-# prompt = "a photograph of an astronaut riding a horse"
+prompt = "a photograph of an astronaut riding a horse"
 
 # image = pipe(prompt)["sample"][0]
 
@@ -27,7 +27,7 @@ def obtain_image(
     num_inference_steps: int = 50,
     guidance_scale: float = 7.5
 ) -> Image:
-    generator = None if seed is None else torch.Generator("cuda").manual_seed(seed)
+    generator = None if seed is None else torch.Generator("cpu").manual_seed(seed)
     print(f"Using device: {pipe.device}")
     image: Image = pipe(
         prompt,
@@ -37,4 +37,4 @@ def obtain_image(
     ).images[0]
     return image
 
-# image = obtain_image(prompt, num_inference_steps=5, seed=1024)
+image = obtain_image(prompt, num_inference_steps=5, seed=1024)
