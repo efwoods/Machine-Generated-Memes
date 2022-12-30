@@ -1,0 +1,9 @@
+services:
+  app:
+    build: .
+    container_name: meme-generator
+    command: uvicorn main:app --host 0.0.0.0 --port 80
+    ports:
+      - 8080:80
+    volumes:
+      - .:/app
