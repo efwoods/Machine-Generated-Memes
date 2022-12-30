@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from ml import obtain_image
 import io
@@ -41,3 +42,21 @@ def generate_image_memory(
     image.save(memory_stream, format="PNG")
     memory_stream.seek(0)
     return StreamingResponse(memory_stream, media_type="image/png")
+
+@app.get("/generate")
+def generate_image(
+    prompt: str,
+    *,
+    seed: int,
+    num_inference_steps: int = 50,
+    guidance_scale: float = 7.5
+):
+    image = obtain_image(
+        prompt, 
+        num_inference_steps=num_inference_steps, 
+        seed=seed,
+        guidance_scale=guidance_scale
+    )
+    image.save("image.png")
+    
+    return FileResponse("image.png")
